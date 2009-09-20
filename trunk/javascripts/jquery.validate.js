@@ -1,5 +1,5 @@
 /**
- * @author Devadatta Sahoo
+ * @author GeekTantra
  * @date 20 September 2009
  */
 var ValidationState = "valid";
