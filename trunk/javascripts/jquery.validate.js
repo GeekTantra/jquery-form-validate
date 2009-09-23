@@ -33,7 +33,7 @@ var ValidationState = "valid";
         });
         function validate_field(id){
             var self = jQuery(id).attr("id");
-            var expression = 'function Validate(){' + options['expression'].replace(/|val|/g, '$(\'#' + self + '\').val()') + '} Validate()';
+            var expression = 'function Validate(){' + options['expression'].replace(/VAL/g, '$(\'#' + self + '\').val()') + '} Validate()';
             var validation_state = eval(expression);
             if (!validation_state) {
                 if (jQuery(id).next('.' + options['error_class']).length == 0) {
