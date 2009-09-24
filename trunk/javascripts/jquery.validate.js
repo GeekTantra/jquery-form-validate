@@ -14,15 +14,33 @@ var ValidationState = "valid";
         }, options);
         var SelfID = jQuery(this).attr("id");
         if (options['live']) {
-            jQuery(this).bind('blur', function(){
-                validate_field(this);
-            });
-            jQuery(this).bind('focus keypress', function(){
-                jQuery(this).next('.' + options['error_class']).fadeOut("fast", function(){
-                    jQuery(this).remove();
+            if (jQuery(this).find('input').length > 0) {
+                jQuery(this).find('input').bind('blur', function(){
+                    if (validate_field("#" + SelfID, options)) {
+                        if (options.callback_success) 
+                            options.callback_success(this);
+                    }
+                    else {
+                        if (options.callback_failure) 
+                            options.callback_failure(this);
+                    }
                 });
-                jQuery(this).removeClass(options['error_field_class']);
-            });
+                jQuery(this).find('input').bind('focus keypress click', function(){
+                    jQuery("#" + SelfID).next('.' + options['error_class']).remove();
+                    jQuery("#" + SelfID).removeClass(options['error_field_class']);
+                });
+            }
+            else {
+                jQuery(this).bind('blur', function(){
+                    validate_field(this);
+                });
+                jQuery(this).bind('focus keypress', function(){
+                    jQuery(this).next('.' + options['error_class']).fadeOut("fast", function(){
+                        jQuery(this).remove();
+                    });
+                    jQuery(this).removeClass(options['error_field_class']);
+                });
+            }
         }
         jQuery(this).parents("form").submit(function(){
             validate_field('#' + SelfID);
