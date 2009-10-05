@@ -34,6 +34,14 @@
                     expression: "if (VAL.match(/^[^\\W][a-zA-Z0-9\\_\\-\\.]+([a-zA-Z0-9\\_\\-\\.]+)*\\@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*\\.[a-zA-Z]{2,4}$/)) return true; else return false;",
                     message: "Please enter a valid Email ID"
                 });
+                jQuery("#ValidPassword").validate({
+                    expression: "if (VAL.length > 5 && VAL) return true; else return false;",
+                    message: "Please enter a valid Password"
+                });
+                jQuery("#ValidConfirmPassword").validate({
+                    expression: "if ((VAL == $('#ValidPassword').val()) && VAL) return true; else return false;",
+                    message: "Confirm password field doesn't match the password field"
+                });
                 jQuery("#ValidSelection").validate({
                     expression: "if (VAL != '0') return true; else return false;",
                     message: "Please make a selection"
@@ -101,6 +109,22 @@
                         </td>
                         <td>
                             <input type="text" name="ValidEmail" id="ValidEmail" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Password
+                        </td>
+                        <td>
+                            <input type="password" name="ValidPassword" id="ValidPassword" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Confirm Password
+                        </td>
+                        <td>
+                            <input type="password" name="ValidConfirmPassword" id="ValidConfirmPassword" />
                         </td>
                     </tr>
                     <tr>
