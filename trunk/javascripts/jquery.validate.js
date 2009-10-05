@@ -2,8 +2,8 @@
  * @author GeekTantra
  * @date 20 September 2009
  */
-var ValidationState = "valid";
 (function(jQuery){
+    var ValidationErrors = new Array();
     jQuery.fn.validate = function(options){
         options = jQuery.extend({
             expression: "return true;",
@@ -13,6 +13,15 @@ var ValidationState = "valid";
             live: true
         }, options);
         var SelfID = jQuery(this).attr("id");
+        var unix_time = new Date();
+        unix_time = parseInt(unix_time.getTime() / 1000);
+        if (!jQuery(this).parents('form:first').attr("id")) {
+            jQuery(this).parents('form:first').attr("id", "Form_" + unix_time);
+        }
+        var FormID = jQuery(this).parents('form:first').attr("id");
+        if (!((typeof(ValidationErrors[FormID]) == 'object') && (ValidationErrors[FormID] instanceof Array))) {
+            ValidationErrors[FormID] = new Array();
+        }
         if (options['live']) {
             if (jQuery(this).find('input').length > 0) {
                 jQuery(this).find('input').bind('blur', function(){
@@ -43,28 +52,42 @@ var ValidationState = "valid";
             }
         }
         jQuery(this).parents("form").submit(function(){
-            validate_field('#' + SelfID);
-            if (ValidationState == "valid") 
+            if (validate_field('#' + SelfID)) 
                 return true;
             else 
                 return false;
         });
         function validate_field(id){
             var self = jQuery(id).attr("id");
-            var expression = 'function Validate(){' + options['expression'].replace(/VAL/g, '$(\'#' + self + '\').val()') + '} Validate()';
+            var expression = 'function Validate(){' + options['expression'].replace(/VAL/g, 'jQuery(\'#' + self + '\').val()') + '} Validate()';
             var validation_state = eval(expression);
             if (!validation_state) {
                 if (jQuery(id).next('.' + options['error_class']).length == 0) {
                     jQuery(id).after('<span class="' + options['error_class'] + '">' + options['message'] + '</span>');
                     jQuery(id).addClass(options['error_field_class']);
                 }
-                ValidationState = "invalid";
+                if (ValidationErrors[FormID].join("|").search("#ValidCheckbox") == -1) 
+                    ValidationErrors[FormID].push(id);
                 return false;
             }
             else {
-                ValidationState = "valid";
+                for (var i = 0; i < ValidationErrors[FormID].length; i++) {
+                    if (ValidationErrors[FormID][i] == id) 
+                        ValidationErrors[FormID].splice(i, 1);
+                }
                 return true;
             }
         }
+    };
+    jQuery.fn.validated = function(callback){
+        jQuery(this).each(function(){
+            if (this.tagName == "FORM") {
+                jQuery(this).submit(function(){
+                    if (ValidationErrors[jQuery(this).attr("id")].length == 0) 
+                        callback();
+					return false;
+                });
+            }
+        });
     };
 })(jQuery);
