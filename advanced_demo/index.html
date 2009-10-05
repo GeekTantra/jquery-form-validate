@@ -39,7 +39,7 @@
                     message: "Please enter a valid Password"
                 });
                 jQuery("#ValidConfirmPassword").validate({
-                    expression: "if ((VAL == $('#ValidPassword').val()) && VAL) return true; else return false;",
+                    expression: "if ((VAL == jQuery('#ValidPassword').val()) && VAL) return true; else return false;",
                     message: "Confirm password field doesn't match the password field"
                 });
                 jQuery("#ValidSelection").validate({
@@ -58,6 +58,9 @@
                     expression: "if (isChecked(SelfID)) return true; else return false;",
                     message: "Please check atleast one checkbox"
                 });
+				jQuery('.AdvancedForm').validated(function(){
+					alert("Use this call to make AJAX submissions.");
+				});
             });
             /* ]]> */
         </script>
@@ -69,7 +72,7 @@
         </div>
         <div class="TabBody">
             <h1>jQuery Live Form Validation Advanced Demo</h1>
-            <form action="" method="post">
+            <form action="" method="post" class="AdvancedForm">
                 <table cellpadding="3" cellspacing="2">
                     <tr>
                         <td>
