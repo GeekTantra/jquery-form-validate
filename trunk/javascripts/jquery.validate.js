@@ -66,7 +66,7 @@
                     jQuery(id).after('<span class="' + options['error_class'] + '">' + options['message'] + '</span>');
                     jQuery(id).addClass(options['error_field_class']);
                 }
-                if (ValidationErrors[FormID].join("|").search("#ValidCheckbox") == -1) 
+                if (ValidationErrors[FormID].join("|").search(id) == -1) 
                     ValidationErrors[FormID].push(id);
                 return false;
             }
